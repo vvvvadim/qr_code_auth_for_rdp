@@ -4,8 +4,8 @@ import qrcode
 
 
 data = {
-    "username": "testgpo",
-    "password": base64.b64encode("Qaz321wsx".encode()).decode()
+    "username": "",
+    "password": base64.b64encode("".encode()).decode()
 }
 
 qr = qrcode.make(json.dumps(data))
