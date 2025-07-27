@@ -11,6 +11,6 @@ data = {
 }
 
 qr = qrcode.make(json.dumps(data))
-qr.save("rdp_credentials.png")
+qr.save(f"{username}+rdp_credentials.png")
 
 print("Generate QR-code Finish! File create!")
