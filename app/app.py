@@ -289,22 +289,21 @@ class Application:
 
             # Обработка распознанных QR-кодов
             if decoded_objects and not self.rdp_active:
-                obj = decoded_objects[0]
-                qr_data = obj.data.decode("utf-8")
+                obj = decoded_objects[0][0]
+                qr_data = base64.b64decode(obj).decode("utf-8")
 
                 try:
                     # Парсинг JSON
                     json_data = json.loads(qr_data)
                     username = json_data.get("username", "")
-                    base64_pwd = json_data.get("password", "")
+                    password = json_data.get("password", "")
 
-                    if username and base64_pwd:
-                        # Декодирование пароля
-                        password = base64.b64decode(base64_pwd).decode("utf-8")
-
+                    if username and password:
+                        print("RUN RDP")
                         # Запуск RDP в отдельном потоке
-                        if qr_data != self.last_qr_data:
-                            self.last_qr_data = qr_data
+                        if obj != self.last_qr_data:
+                            print(obj)
+                            self.last_qr_data = obj
                             self.connection_status.set("Подключаемся...")
                             threading.Thread(
                                 target=self.connect_rdp,
@@ -342,6 +341,8 @@ class Application:
 
             # Останавливаем сканирование
             self.stop_scanning()
+            print("1")
+            print(config["RDP_Settings"]["RDP_SERVER"])
 
             # Формирование команды подключения
             cmd = [
@@ -355,6 +356,7 @@ class Application:
                 "/cert:ignore",
                 "/rfx"
             ]
+            print(cmd)
 
             # Запуск RDP клиента
             self.connection_status.set("Подключение активно...")

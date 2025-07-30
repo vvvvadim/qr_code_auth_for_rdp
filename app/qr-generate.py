@@ -7,10 +7,12 @@ username = input("Input username:")
 password = input("Input password:")
 data = {
     "username": username,
-    "password": base64.b64encode(password.encode()).decode()
+    "password": password
 }
 
-qr = qrcode.make(json.dumps(data))
+data_code = base64.b64encode(json.dumps(data).encode("utf-8")).decode()
+
+qr = qrcode.make(json.dumps(data_code))
 qr.save(f"{username}+rdp_credentials.png")
 
 print("Generate QR-code Finish! File create!")
